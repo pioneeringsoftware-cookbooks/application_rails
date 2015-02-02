@@ -1,0 +1,7 @@
+name             'application_rails'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures application_rails'
+long_description 'Installs/Configures application_rails'
+version          '0.1.0'
