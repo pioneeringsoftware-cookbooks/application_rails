@@ -3,7 +3,9 @@ driver:
   name: vagrant
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
+  roles_path: roles
+  data_bags_path: data_bags
 
 platforms:
   - name: ubuntu-12.04
