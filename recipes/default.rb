@@ -13,9 +13,10 @@ include_recipe 'git'
 data_bag('application_rails').each do |name|
   item = data_bag_item('application_rails', name)
   application name do
-    repository item['repository']
-    deploy_key item['deploy_key']
-    revision item['revision'] if item['revision']
+    %i(repository deploy_key revision).each do |method|
+      string = item[method.to_s]
+      send(method, string) if string
+    end
     path File.join(item['path'] || node['application_rails']['root'], name)
     env = node['rack_env'] || node['application_rails']['env']
     environment_name env
