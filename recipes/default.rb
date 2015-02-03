@@ -34,6 +34,16 @@ data_bag('application_rails').each do |name|
       end
     end
 
+    if item['unicorn']
+      owner 'root'
+      group 'root'
+      unicorn do
+        options do
+          rails_env env
+        end
+      end
+    end
+
     # Connect any YAML (or JSON) configuration files to the application. Make
     # them available via symbolic links. The `application` cookbook's
     # limitations make two levels of linkage necessary. The first links the
