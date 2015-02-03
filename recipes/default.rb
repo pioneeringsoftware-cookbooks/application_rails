@@ -32,12 +32,18 @@ data_bag('application_rails').each do |name|
       end
     end
 
+    # Connect any YAML (or JSON) configuration files to the application. Make
+    # them available via symbolic links. The `application` cookbook's
+    # limitations make two levels of linkage necessary. The first links the
+    # files from `/etc/conf` to `shared` and the second links from `shared` to
+    # `config`.
     node['confyaml']['files'].each do |key, value|
       base = File.basename(value['expand_path'])
       symlink_before_migrate.update(base => File.join('config', base))
     end
   end
 
+  # Sym-link from `/etc/conf` to `shared`.
   node['confyaml']['files'].each do |key, value|
     path = value['expand_path']
     base = File.basename(path)
