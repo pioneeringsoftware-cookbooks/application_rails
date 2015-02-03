@@ -20,7 +20,8 @@ data_bag('application_rails').each do |name|
     path File.join(item['path'] || node['application_rails']['root'], name)
     env = node['rack_env'] || node['application_rails']['env']
     environment_name env
-    db = node['application_rails']['databases'][name] || {}
+    db = node['application_rails']['database'].dup
+    db.merge!(node['application_rails']['databases'][name] || {})
     db['database'] ||= "#{node.chef_environment}_#{name}_#{env}"
 
     rails do
