@@ -72,4 +72,8 @@ data_bag('application_rails').each do |name|
       to path
     end
   end
+
+  directory File.join(resources("application[#{name}]").path, 'current', 'tmp', 'pids')
+    recursive true
+  end
 end
