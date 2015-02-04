@@ -42,6 +42,14 @@ data_bag('application_rails').each do |name|
         options do
           rails_env env
         end
+        bundler true
+        restart_command do
+          init_script = File.join('etc', 'init.d', name)
+          execute "#{init_script} hup" do
+            user 'root'
+            only_if { File.exist?(init_script) }
+          end
+        end
       end
     end
 
