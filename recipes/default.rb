@@ -9,6 +9,7 @@
 
 include_recipe 'confyaml'
 include_recipe 'git'
+include_recipe 'runit'
 
 data_bag('application_rails').each do |name|
   item = data_bag_item('application_rails', name)
