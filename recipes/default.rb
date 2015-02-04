@@ -73,7 +73,7 @@ data_bag('application_rails').each do |name|
     end
   end
 
-  directory File.join(resources("application[#{name}]").path, 'current', 'tmp', 'pids')
+  directory File.join(resources("application[#{name}]").path, 'current', 'tmp', 'pids') do
     recursive true
   end
 end
