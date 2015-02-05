@@ -24,6 +24,11 @@ data_bag('application_rails').each do |name|
     db = node['application_rails']['database'].dup
     db.merge!(node['application_rails']['databases'][name] || {})
     db['database'] ||= "#{node.chef_environment}_#{name}_#{env}"
+    if node['postgresql'] && (password_hash = node['postgresql']['password'])
+      username, password = password_hash.first
+      db['username'] ||= username
+      db['password'] ||= password
+    end
 
     rails do
       gems %w(bundler)
