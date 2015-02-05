@@ -11,6 +11,12 @@ include_recipe 'confyaml'
 include_recipe 'git'
 include_recipe 'runit'
 
+# https://tickets.opscode.com/browse/COOK-4039
+gem_package 'rake' do
+  action :install
+  options('--force')
+end
+
 data_bag('application_rails').each do |name|
   item = data_bag_item('application_rails', name)
   application name do
