@@ -14,9 +14,9 @@ include_recipe 'runit'
 data_bag('application_rails').each do |name|
   item = data_bag_item('application_rails', name)
   application name do
-    %i(repository deploy_key revision).each do |method|
-      string = item[method.to_s]
-      send(method, string) if string
+    %w(repository deploy_key revision).each do |method|
+      string = item[method]
+      send(method.to_sym, string) if string
     end
     path File.join(item['path'] || node['application_rails']['root'], name)
     env = node['rack_env'] || node['application_rails']['env']
@@ -33,9 +33,9 @@ data_bag('application_rails').each do |name|
     rails do
       gems %w(bundler)
       database do
-        %i(adapter host database username password encoding).each do |method|
-          arg = db[method.to_s]
-          send(method, arg) if arg
+        %w(adapter host database username password encoding).each do |method|
+          arg = db[method]
+          send(method.to_sym, arg) if arg
         end
       end
     end
