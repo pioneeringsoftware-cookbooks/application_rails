@@ -30,8 +30,11 @@ data_bag('application_rails').each do |name|
     db = node['application_rails']['database'].dup
     db.merge!(node['application_rails']['databases'][name] || {})
 
-    # Chef environment names may include dashes. Database names (e.g. for
-    # PostgreSQL) may not include dashes. Substitute dashes for underscores.
+    # Note that the default database name derives from the Chef environment
+    # name, the application name plus the Rack environment name, all delimited
+    # by underscores. Chef environment names may include dashes. Database names
+    # (e.g. for PostgreSQL) may not include dashes. Substitute dashes for
+    # underscores.
     db['database'] ||= "#{node.chef_environment.gsub('-', '_')}_#{name}_#{env}"
 
     if node['postgresql'] && (password_hash = node['postgresql']['password'])
