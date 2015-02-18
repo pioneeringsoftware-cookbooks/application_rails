@@ -29,7 +29,11 @@ data_bag('application_rails').each do |name|
     environment_name env
     db = node['application_rails']['database'].dup
     db.merge!(node['application_rails']['databases'][name] || {})
-    db['database'] ||= "#{node.chef_environment}_#{name}_#{env}"
+
+    # Chef environment names may include dashes. Database names (e.g. for
+    # PostgreSQL) may not include dashes. Substitute dashes for underscores.
+    db['database'] ||= "#{node.chef_environment.gsub('-', '_')}_#{name}_#{env}"
+
     if node['postgresql'] && (password_hash = node['postgresql']['password'])
       username, password = password_hash.first
       db['username'] ||= username
