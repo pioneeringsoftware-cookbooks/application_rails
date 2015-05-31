@@ -21,7 +21,7 @@ data_bag('application_rails').each do |name|
   item = data_bag_item('application_rails', name)
   application name do
     %w(repository deploy_key revision).each do |method|
-      string = item[method]
+      string = item[method] || node[method]
       send(method.to_sym, string) if string
     end
     path File.join(item['path'] || node['application_rails']['root'], name)
@@ -30,8 +30,11 @@ data_bag('application_rails').each do |name|
     db = node['application_rails']['database'].dup
     db.merge!(node['application_rails']['databases'][name] || {})
 
-    # Chef environment names may include dashes. Database names (e.g. for
-    # PostgreSQL) may not include dashes. Substitute dashes for underscores.
+    # Note that the default database name derives from the Chef environment
+    # name, the application name plus the Rack environment name, all delimited
+    # by underscores. Chef environment names may include dashes. Database names
+    # (e.g. for PostgreSQL) may not include dashes. Substitute dashes for
+    # underscores.
     db['database'] ||= "#{node.chef_environment.gsub('-', '_')}_#{name}_#{env}"
 
     if node['postgresql'] && (password_hash = node['postgresql']['password'])
