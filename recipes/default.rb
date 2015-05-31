@@ -21,7 +21,7 @@ data_bag('application_rails').each do |name|
   item = data_bag_item('application_rails', name)
   application name do
     %w(repository deploy_key revision).each do |method|
-      string = item[method]
+      string = item[method] || node[method]
       send(method.to_sym, string) if string
     end
     path File.join(item['path'] || node['application_rails']['root'], name)
